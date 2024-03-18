@@ -1,0 +1,125 @@
+import { AppDataSource } from "../data/data-source";
+import { History } from "../entities/History";
+import { Post } from "../entities/Post";
+import { User } from "../entities/User";
+import { IPost } from "../interfaces/IPost";
+
+export class PostRepository {
+  async findAllPost() {
+    const postRepository = AppDataSource.getRepository(Post);
+
+    const postWithCommentCount = await postRepository
+      .createQueryBuilder("post")
+      .leftJoin("post.comments", "comment")
+      .loadRelationCountAndMap("post.commentCount", "post.comments")
+      .select(["post.id", "post.title", "post.views", "post.likes", "post.dislikes"])
+      .addSelect((subQuery) => {
+        return subQuery
+          .select("COUNT(comment.id)", "commentCount")
+          .from("comment", "comment")
+          .where("comment.post_id = post.id");
+      }, "commentCount")
+      .groupBy("post.id")
+      .getMany();
+
+    if (!postWithCommentCount) {
+      throw new Error("Post not found");
+    }
+
+    return postWithCommentCount;
+  }
+
+  async createPost(data: IPost) {
+    const userRepository = AppDataSource.getRepository(User);
+    const user = await userRepository.findOneBy({ id: data.user_id });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const post = new Post();
+    post.title = data.title;
+    post.description = data.description;
+    post.user = user;
+    post.views = 0;
+    post.likes = 0;
+    post.dislikes = 0;
+
+    if (data.imagePath) {
+      post.imagePath = data.imagePath;
+    }
+
+    const postRepository = AppDataSource.getRepository(Post);
+    await postRepository.save(post);
+
+    return post;
+  }
+
+  async findPost(id: number) {
+    const postRepository = AppDataSource.getRepository(Post);
+
+    const post = await postRepository
+      .createQueryBuilder("post")
+      .leftJoinAndSelect("post.user", "user", "user.id = post.user_id")
+      .leftJoinAndSelect("post.comments", "comment")
+      .leftJoinAndSelect("post.history", "history")
+      .select([
+        "post.id",
+        "post.title",
+        "post.description",
+        "post.views",
+        "post.likes",
+        "post.dislikes",
+        "user.name",
+        "user.email",
+        "comment.id",
+        "comment.description",
+        "history.id",
+        "history.description",
+      ])
+      .where("post.id = :id", { id })
+      .getOne();
+
+    if (!post) {
+      throw new Error("Post not found");
+    }
+
+    return post;
+  }
+
+  async updatePost(postId: number, postData: Partial<Post>): Promise<Post | null> {
+    const postRepository = AppDataSource.getRepository(Post);
+    const historyRepository = AppDataSource.getRepository(History);
+
+    let post = await postRepository.findOneBy({ id: postId });
+    if (!post) {
+      return null;
+    }
+
+    const newHistory = new History();
+    newHistory.post = post;
+    newHistory.title = post.title;
+    newHistory.description = post.description;
+
+    if (post.imagePath) {
+      newHistory.imagePath = post.imagePath;
+    }
+
+    await historyRepository.save(newHistory);
+
+    await postRepository.update(postId, postData);
+
+    post = await postRepository.findOneBy({ id: postId });
+    return post;
+  }
+
+  async deletePost(id: number) {
+    const postRepository = AppDataSource.getRepository(Post);
+    const postToDelete = await postRepository.findOneBy({ id });
+    if (postToDelete) {
+      await postRepository.remove(postToDelete);
+    } else {
+      throw new Error("Post not found");
+    }
+  }
+}

@@ -1,0 +1,4 @@
+export const jwtConfig = {
+    secret: process.env.ACCESS_TOKEN_SECRET || 'MinhaChaveSecretaHomol',
+    expiresIn: '1h',
+};
