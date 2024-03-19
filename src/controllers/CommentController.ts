@@ -19,6 +19,7 @@ export class CommentController {
       const commentData: IComment = {
         description,
         post_id: parseInt(post_id),
+        user_id: parseInt(user_id),
       };
 
       const comment = await this.commentService.createComment(commentData);

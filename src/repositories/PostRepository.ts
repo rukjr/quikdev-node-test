@@ -74,10 +74,13 @@ export class PostRepository {
         "post.dislikes",
         "user.name",
         "user.email",
+        "user.id",
         "comment.id",
         "comment.description",
         "comment.createdAt",
+        "comment.isRemoved",
         "commentUser.name",
+        "commentUser.id",
         "history.id",
         "history.description",
         "history.title",
@@ -158,6 +161,18 @@ export class PostRepository {
       .update(Post)
       .set({
         dislikes: () => "dislikes + 1",
+      })
+      .where("id = :id", { id: postId })
+      .execute();
+  }
+
+  async viewPost(postId: number): Promise<void> {
+    const postRepository = AppDataSource.getRepository(Post);
+    await postRepository
+      .createQueryBuilder()
+      .update(Post)
+      .set({
+        views: () => "views + 1",
       })
       .where("id = :id", { id: postId })
       .execute();

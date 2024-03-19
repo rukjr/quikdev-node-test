@@ -32,4 +32,8 @@ export class PostService {
   async likePost(id: number) {
     return this.postRepository.likePost(id);
   }
+
+  async viewPost(id: number) {
+    return this.postRepository.viewPost(id);
+  }
 }

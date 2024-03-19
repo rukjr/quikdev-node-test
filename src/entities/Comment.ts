@@ -10,6 +10,12 @@ export class Comment {
   @Column("text")
   description: string;
 
+  @Column("text")
+  post_id: number;
+
+  @Column("text")
+  user_id: number;
+
   @CreateDateColumn()
   createdAt?: Date;
 

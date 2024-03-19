@@ -56,7 +56,7 @@ const postController = new PostController();
  *           description: "O número total de comentários no post"
  *           example: 5
  */
-router.get("/all", IsAdmin, (req, res) => postController.findAllPost(req, res));
+router.get("/all", (req, res) => postController.findAllPost(req, res));
 /**
  * @swagger
  * components:
@@ -239,7 +239,7 @@ router.post("/create", upload.single('imagePath'), (req, res) => postController.
  *           type: string
  *           example: "Histórico de alterações do post."
  */
-router.get("/find/:id", IsAdminOrAuthorPost, (req, res) => postController.findPost(req, res));
+router.get("/find/:id", (req, res) => postController.findPost(req, res));
 /**
  * @swagger
  * paths:
@@ -345,7 +345,7 @@ router.delete("/delete/:id", IsAdminOrAuthorPost, (req, res) => postController.d
  * @swagger
  * /post/dislike/{id}:
  *   patch:
- *     summary: Adiciona um dislike a um post
+ *     summary: Adiciona um dislike a um post pelo ID
  *     tags: [Post]
  *     parameters:
  *       - in: path
@@ -373,7 +373,7 @@ router.patch("/dislike/:id", (req, res) => postController.dislikePost(req, res))
  * @swagger
  * /post/like/{id}:
  *   patch:
- *     summary: Adiciona um like a um post
+ *     summary: Adiciona um like a um post pelo ID
  *     tags: [Post]
  *     parameters:
  *       - in: path
@@ -397,4 +397,32 @@ router.patch("/dislike/:id", (req, res) => postController.dislikePost(req, res))
  *         description: Post não encontrado
  */
 router.patch("/like/:id", (req, res) => postController.likePost(req, res));
+/**
+ * @swagger
+ * /post/view/{id}:
+ *   patch:
+ *     summary: Soma uma visualização ao post pelo ID
+ *     tags: [Post]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID do post
+ *     responses:
+ *       200:
+ *         description: View adicionada com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: View adicionada com sucesso
+ *       404:
+ *         description: Post não encontrado
+ */
+router.patch("/view/:id", (req, res) => postController.viewPost(req, res));
 export default router;

@@ -24,13 +24,15 @@ export const IsAdminOrAuthorComment = async (
     const comment = await commentRepository.findOneBy({ id: commentId });
 
     const postRepository = AppDataSource.getRepository(Post);
-    const post = await postRepository.findOneBy({ id: comment?.post.id });
+    const post = await postRepository.findOneBy({ id: comment?.post_id });
 
-    if (!comment) { 
+    if (!comment) {
       throw new Error("Comment not found");
     }
 
-    if (req.user?.userId === comment.user.id.toString() || req.user?.userId === post?.user.id.toString() ) {
+    const userID = parseInt(req.user?.userId || "0");
+
+    if (userID === comment.user_id || userID === post?.user_id) {
       return next();
     } else {
       return res.status(403).json({ message: "You don't have permission" });

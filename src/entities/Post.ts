@@ -8,6 +8,9 @@ export class Post {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column("text")
+  user_id: number;
+
   @Column({ length: 100 })
   title: string;
 

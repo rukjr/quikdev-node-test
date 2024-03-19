@@ -113,4 +113,14 @@ export class PostController {
       res.status(500).send((error as Error).message);
     }
   }
+
+  async viewPost(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      await this.postService.viewPost(parseInt(id));
+      res.json({ message: "Post viewd successfully." });
+    } catch (error: unknown) {
+      res.status(500).send((error as Error).message);
+    }
+  }
 }
