@@ -368,8 +368,7 @@ router.delete("/delete/:id", IsAdminOrAuthorPost, (req, res) => postController.d
  *       404:
  *         description: Post não encontrado
  */
-
-router.patch("/deslike/:id", (req, res) => postController.dislikePost(req, res));
+router.patch("/dislike/:id", (req, res) => postController.dislikePost(req, res));
 /**
  * @swagger
  * /post/like/{id}:
