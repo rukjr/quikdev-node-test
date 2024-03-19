@@ -24,4 +24,12 @@ export class PostService {
   async deletePost(id: number) {
     return this.postRepository.deletePost(id);
   }
+
+  async dislikePost(id: number) {
+    return this.postRepository.dislikePost(id);
+  }
+
+  async likePost(id: number) {
+    return this.postRepository.likePost(id);
+  }
 }

@@ -101,8 +101,6 @@ export class PostRepository {
       return null;
     }
 
-    console.log("updatePost ", postData);
-
     if (!postData.views) {
       const newHistory = new History();
       newHistory.post = post;
@@ -129,5 +127,29 @@ export class PostRepository {
     } else {
       throw new Error("Post not found");
     }
+  }
+
+  async likePost(postId: number): Promise<void> {
+    const postRepository = AppDataSource.getRepository(Post);
+    await postRepository
+      .createQueryBuilder()
+      .update(Post)
+      .set({
+        likes: () => "likes + 1",
+      })
+      .where("id = :id", { id: postId })
+      .execute();
+  }
+
+  async dislikePost(postId: number): Promise<void> {
+    const postRepository = AppDataSource.getRepository(Post);
+    await postRepository
+      .createQueryBuilder()
+      .update(Post)
+      .set({
+        dislikes: () => "dislikes + 1",
+      })
+      .where("id = :id", { id: postId })
+      .execute();
   }
 }

@@ -93,4 +93,24 @@ export class PostController {
       res.status(500).send((error as Error).message);
     }
   }
+
+  async dislikePost(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      await this.postService.dislikePost(parseInt(id));
+      res.json({ message: "Post desliked successfully." });
+    } catch (error: unknown) {
+      res.status(500).send((error as Error).message);
+    }
+  }
+
+  async likePost(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      await this.postService.likePost(parseInt(id));
+      res.json({ message: "Post liked successfully." });
+    } catch (error: unknown) {
+      res.status(500).send((error as Error).message);
+    }
+  }
 }

@@ -341,5 +341,61 @@ router.patch("/update/:id", IsAdminOrAuthorPost, upload.single('imagePath'), (re
  *           description: Post não encontrado
  */
 router.delete("/delete/:id", IsAdminOrAuthorPost, (req, res) => postController.deletePost(req, res));
+/**
+ * @swagger
+ * /post/dislike/{id}:
+ *   patch:
+ *     summary: Adiciona um dislike a um post
+ *     tags: [Post]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID do post
+ *     responses:
+ *       200:
+ *         description: Dislike adicionado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Dislike adicionado com sucesso
+ *       404:
+ *         description: Post não encontrado
+ */
 
+router.patch("/deslike/:id", (req, res) => postController.dislikePost(req, res));
+/**
+ * @swagger
+ * /post/like/{id}:
+ *   patch:
+ *     summary: Adiciona um like a um post
+ *     tags: [Post]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID do post
+ *     responses:
+ *       200:
+ *         description: Like adicionado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Like adicionado com sucesso
+ *       404:
+ *         description: Post não encontrado
+ */
+router.patch("/like/:id", (req, res) => postController.likePost(req, res));
 export default router;
