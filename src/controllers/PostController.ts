@@ -65,8 +65,8 @@ export class PostController {
   async updatePost(req: CustomRequest, res: Response) {
     const { id } = req.params;
     try {
-      const { title, description } = req.body;
-      const postData:IPost = { title, description };
+      const { title, description, views, likes, dislikes } = req.body;
+      const postData:IPost = { title, description, views, likes, dislikes };
 
       if (req.file) {
         postData["imagePath"] = req.file.filename;

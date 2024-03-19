@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Timestamp, CreateDateColumn } from "typeorm";
 import { Post } from "./Post";
 
 @Entity()
@@ -14,6 +14,9 @@ export class History {
 
   @Column({ nullable: true })
   imagePath?: string;
+
+  @CreateDateColumn()
+  createdAt?: Date;
 
   @ManyToOne(() => Post, post => post.history)
   @JoinColumn({ name: "post_id" })

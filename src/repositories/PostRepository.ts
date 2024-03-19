@@ -60,8 +60,9 @@ export class PostRepository {
 
     const post = await postRepository
       .createQueryBuilder("post")
-      .leftJoinAndSelect("post.user", "user", "user.id = post.user_id")
+      .leftJoinAndSelect("post.user", "user")
       .leftJoinAndSelect("post.comments", "comment")
+      .leftJoinAndSelect("comment.user", "commentUser")
       .leftJoinAndSelect("post.history", "history")
       .select([
         "post.id",
@@ -74,8 +75,12 @@ export class PostRepository {
         "user.email",
         "comment.id",
         "comment.description",
+        "comment.createdAt",
+        "commentUser.name",
         "history.id",
         "history.description",
+        "history.title",
+        "history.createdAt",
       ])
       .where("post.id = :id", { id })
       .getOne();
@@ -96,16 +101,19 @@ export class PostRepository {
       return null;
     }
 
-    const newHistory = new History();
-    newHistory.post = post;
-    newHistory.title = post.title;
-    newHistory.description = post.description;
+    console.log("updatePost ", postData);
 
-    if (post.imagePath) {
-      newHistory.imagePath = post.imagePath;
+    if (!postData.views) {
+      const newHistory = new History();
+      newHistory.post = post;
+      newHistory.title = post.title;
+      newHistory.description = post.description;
+
+      if (post.imagePath) {
+        newHistory.imagePath = post.imagePath;
+      }
+      await historyRepository.save(newHistory);
     }
-
-    await historyRepository.save(newHistory);
 
     await postRepository.update(postId, postData);
 
