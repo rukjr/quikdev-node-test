@@ -16,6 +16,6 @@ export const AuthService = async (req: Request, res: Response) => {
     });
     res.json({ token });
   } else {
-    res.status(401).json({message: "Email or password is incorrect."});
+    res.json({message: "Email or password is incorrect."}).status(401);
   }
 };

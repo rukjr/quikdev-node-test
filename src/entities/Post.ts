@@ -30,11 +30,11 @@ export class Post {
   @JoinColumn({ name: "user_id" })
   user: User;
 
-  @OneToMany(() => Comment, (comment) => comment.post)
+  @OneToMany(() => Comment, (comment) => comment.post, { onDelete: "CASCADE" })
   @JoinColumn({ name: "post_id" })
   comments: Comment[];
 
-  @OneToMany(() => History, (history) => history.post)
+  @OneToMany(() => History, (history) => history.post, { onDelete: "CASCADE" })
   @JoinColumn({ name: "post_id" })
   history: History[];
 }
