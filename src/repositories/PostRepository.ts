@@ -1,4 +1,5 @@
 import { AppDataSource } from "../data/data-source";
+import { Comment } from "../entities/Comment";
 import { History } from "../entities/History";
 import { Post } from "../entities/Post";
 import { User } from "../entities/User";
@@ -121,6 +122,15 @@ export class PostRepository {
 
   async deletePost(id: number) {
     const postRepository = AppDataSource.getRepository(Post);
+    const commentRepository = AppDataSource.getRepository(Comment);
+    const historyRepository = AppDataSource.getRepository(History);
+
+    const comments = await commentRepository.find({ where: { post: { id } } });
+    await commentRepository.remove(comments);
+
+    const history = await historyRepository.find({ where: { post: { id } } });
+    await historyRepository.remove(history);
+    
     const postToDelete = await postRepository.findOneBy({ id });
     if (postToDelete) {
       await postRepository.remove(postToDelete);
