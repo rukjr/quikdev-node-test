@@ -38,8 +38,9 @@ Siga estes passos para configurar e executar o sistema:
    ```
 6. Antes de iniciar o servidor, rode as migrations para criação do banco de dados `npm run migration:run`.
    ```
-   Você poderá alterar o usuário e senha dentro do arquivo /migrations/1710685992283-SeedAdminUser.ts, caso não por padrão será gerado um admin sendo o email 'admin@example.com' e a senha '123'
+   Você poderá alterar o usuário e senha dentro do arquivo /migrations/1710685992283-SeedAdminUser.ts
    ```
+   caso não defina um usuário e senha, então por padrão será gerado um admin sendo o email `admin@example.com` e a senha `123`' e um usuário sendo o email `user@example.com` e a senha `123`'
 7. Inicie o servidor de desenvolvimento com `npm run dev`.
 8. (opcional) Caso queira compilar o projeto e rodar a versão de produção basta executar `npm run build` seguido de `npm start`.
 

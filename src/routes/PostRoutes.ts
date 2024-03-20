@@ -2,7 +2,6 @@ import { Router } from "express";
 import { PostController } from "../controllers/PostController";
 import { IsAdminOrAuthorPost } from "../middlewares/IsAdminOrAuthorPost";
 import { upload } from '../config/multerConfig';
-import { IsAdmin } from "../middlewares/IsAdmin";
 
 const router = Router();
 const postController = new PostController();

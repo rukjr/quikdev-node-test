@@ -37,8 +37,8 @@ export class CommentController {
   async updateComment(req: CustomRequest, res: Response) {
     const { id } = req.params;
     try {
-      const { description, post_id } = req.body;
-      const commentData: IComment = { description, post_id };
+      const { description } = req.body;
+      const commentData = { description };
 
       const updatedComment = await this.commentService.updateComment(Number(id), commentData);
 

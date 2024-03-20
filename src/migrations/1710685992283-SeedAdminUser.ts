@@ -19,6 +19,20 @@ export class SeedAdminUser1710685992283 implements MigrationInterface {
         },
       ])
       .execute();
+    
+      await queryRunner.manager
+      .createQueryBuilder()
+      .insert()
+      .into("user")
+      .values([
+        {
+          name: "User",
+          email: "user@example.com",
+          password: password, // Use a senha hasheada
+          level: "user",
+        },
+      ])
+      .execute();
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

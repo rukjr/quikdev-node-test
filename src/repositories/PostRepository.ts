@@ -70,6 +70,7 @@ export class PostRepository {
         "post.title",
         "post.description",
         "post.views",
+        "post.user_id",
         "post.likes",
         "post.dislikes",
         "user.name",

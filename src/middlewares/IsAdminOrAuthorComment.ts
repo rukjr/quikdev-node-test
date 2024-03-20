@@ -18,7 +18,7 @@ export const IsAdminOrAuthorComment = async (
   if (req.user?.level === "admin") {
     return next();
   }
-
+  
   try {
     const commentRepository = AppDataSource.getRepository(Comment);
     const comment = await commentRepository.findOneBy({ id: commentId });
@@ -30,9 +30,9 @@ export const IsAdminOrAuthorComment = async (
       throw new Error("Comment not found");
     }
 
-    const userID = parseInt(req.user?.userId || "0");
-
-    if (userID === comment.user_id || userID === post?.user_id) {
+    const userID = parseInt(req.user?.userId || "");
+    
+    if (userID === comment.user_id || userID === post?.user_id || req.user?.level === "admin") {
       return next();
     } else {
       return res.status(403).json({ message: "You don't have permission" });

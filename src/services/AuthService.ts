@@ -11,10 +11,10 @@ export const AuthService = async (req: Request, res: Response) => {
   const user = await userRepository.findOneBy({ email });
 
   if (user && bcrypt.compareSync(password, user.password)) {
-    const token = jwt.sign({ userId: user.id, level: user.level }, jwtConfig.secret, {
+    const token = jwt.sign({ userId: user.id, level: user.level, username: user.name }, jwtConfig.secret, {
       expiresIn: jwtConfig.expiresIn,
     });
-    res.json({ token });
+    res.json({ token, userId: user.id, username: user.name});
   } else {
     res.json({message: "Email or password is incorrect."}).status(401);
   }

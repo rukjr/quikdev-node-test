@@ -22,7 +22,9 @@ export const IsAdminOrAuthorPost = async (
     const postRepository = AppDataSource.getRepository(Post);
     const post = await postRepository.findOneBy({ id: postId });
 
-    if (post && req.user?.userId === post.user.id.toString()) {
+    const userId = parseInt(req.user?.userId || '0');
+
+    if (userId === post?.user_id || req.user?.level === "admin") {
       return next();
     } else {
       return res.status(403).json({ message: "You don't have permission" });
